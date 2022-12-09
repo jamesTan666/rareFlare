@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="../public/assets/css/bootstrap.min.css"></link>
+</head>
+<body>
+    <div id="app" class="mx-auto my-3">
+        <div class="container-fluid">
+            <input type="text" class="form-control mx-auto" placeholder="Number of Users to generate" v-model="num">
+            <button class="btn btn-dark mx-auto" @click="generateData()">Generate</button>
+        </div>
+        <div class="m-0 p-0" v-if="isGenerated">
+            <div class="container-fluid" v-for="(file, fileNum) in files">
+                <span class="h1 text-start">{{ file.name }}</span>
+                <table class="table">
+                    <thead>
+                        <th scope="col">#</th>
+                        <th scope="col" v-for="header in file.headers">{{ header }}</th>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(row, idx) in file.data">
+                            <th scope="row">{{ idx }}</th>
+                            <td v-for="elem in row">{{ elem }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <a class="btn btn-success mx-auto" target="_blank" v-bind:href="fileLinks[fileNum]" v-bind:download="file.name">Download</a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bootstrap -->
+    <script src="../public/assets/js/bootstrap.bundle.min.js"></script>
+    <!-- Vue -->
+    <script src="../public/assets/js/vue.global.js"></script>
+    <!-- Axios -->
+    <script src="../public/assets/js/axios.min.js"></script>
+    <!-- Faker -->
+    <script src = "./node_modules/faker/dist/faker.js" type = "text/javascript"></script>
+    <!-- Custom Script -->
+    <script>
+        const app = Vue.createApp({
+            data() {
+                return {
+                    isGenerated: false,
+                    num: 50,
+                    files: [], 
+                    fileLinks: []
+                };
+            }, 
+            methods: {
+                generateData() {
+                    this.files = [];
+                    this.fileLinks = [];
+                    let num = this.num > 0 ? this.num : 50;
+
+                    const filenames = [
+                        "User", 
+                        "Skill", 
+                        "Competition", 
+                        "Fee", 
+                        "User_Skill", 
+                        "User_Lacks", 
+                    ];
+
+                    const skills = [
+                        "Active Server Pages (ASP)",
+                        "AJAX",
+                        "API", 
+                        "ASP.NET",
+                        "AV Systems", 
+                        "Amazon Web Service (AWS)",
+                        "Accounting", 
+                        "Academic Administration",
+                        "Academic Consulting", 
+                        "Academic Development", 
+                        "Academic Publishing", 
+                        "Academic Research", 
+                        "Academic Writing", 
+                        "Acceptance Testing", 
+                        "Accident Insurance", 
+                        "Acquisition Assessment", 
+                        "Acquisition Sales", 
+                        "Acquisitions", 
+                        "Acturial Sciences", 
+                        "Ad Development", 
+                        "Ad Tracking", 
+                        "Ada", 
+                        "Adobe Experience Design",
+                        "Adobe Illustrator", 
+                        "Adobe Photoshop", 
+                        "Adobe Software", 
+                        "Adobe Suite", 
+                        "Adobe", 
+                        "Adult Education", 
+                        "Advertising Law", 
+                        "Advertising", 
+                        "Aerospace Engineering", 
+                        "Agile",
+                        "Agile & Waterfall Methodologies",
+                        "Agile Application Development",
+                        "Agile Environment",
+                        "Agile Leadership",
+                        "Agile Methodologies",
+                        "Agile Modeling",
+                        "Agile Project Management",
+                        "Agile Testing",
+                        "Agile Web Development",
+                        "Agriculture", 
+                        "Algorithm Analysis", 
+                        "Amazon CloudFront",
+                        "Amazon Dynamodb",
+                        "Amazon EBS",
+                        "Amazon EC2",
+                        "Amazon Kindle",
+                        "Amazon Marketplace",
+                        "Amazon Mechanical Turk",
+                        "Amazon RDS",
+                        "Amazon Redshift",
+                        "Amazon S3",
+                        "Amazon SQS",
+                        "Amazon SimpleDB (SDB)",
+                        "Amazon VPC",
+                        "AngularJS", 
+                        "Antenna", 
+                        "Applied Mathematics",
+                        "Architecture",
+                        "Arch Linux", 
+                        "Artificial Intelligence", 
+                        "Art", 
+                        "Automation", 
+                        "Back-end Programming", 
+                        "Banking", 
+                        "Business Administration", 
+                        "Business Development", 
+                        "Business Management", 
+                        "Blockchain",
+                        "Blue Team",
+                        "Binary Exploitation",
+                        "Biology",
+                        "Bitcoin", 
+                        "Bootstrap", 
+                        "CSS", 
+                        "C", 
+                        "C Plus Plus",
+                        "C Sharp",
+                        "CI/CD",
+                        "Cassandra",
+                        "Chemical Engineering", 
+                        "Chemistry",
+                        "Chocolatey", 
+                        "Cloud Computing", 
+                        "Cloud Deployment", 
+                        "Cloud Development", 
+                        "COBOL", 
+                        "Cocoa Touch", 
+                        "Cocoa",
+                        "CoffeeScript", 
+                        "Command and Control",
+                        "Computer Graphics", 
+                        "Computer Networking",
+                        "Computer Science", 
+                        "Computer Vision", 
+                        "Communication", 
+                        "Continuous Deployment (CD)", 
+                        "Continuous Integration (CI)",
+                        "Contract Law", 
+                        "Corporate Design", 
+                        "Corporate Development", 
+                        "Corporate Management", 
+                        "Cost Analysis",
+                        "Customer Outreach", 
+                        "Customer Relationship Management (CRM)",
+                        "Cyber-physical Systems",
+                        "Cyber-security",
+                        "DNS Administration", 
+                        "DNS Management", 
+                        "DNS Server", 
+                        "DDoS",
+                        "D", 
+                        "Dart",
+                        "Data Science", 
+                        "Data Analytics", 
+                        "Database Management", 
+                        "Data Engineering", 
+                        "Debian", 
+                        "Design",
+                        "DevOps", 
+                        "Desktop Application Design", 
+                        "Desktop Application Development", 
+                        "Docker", 
+                        "ECMAScript", 
+                        "ERP Software", 
+                        "ER Modelling", 
+                        "Economics", 
+                        "Education", 
+                        "Electrical Engineering", 
+                        "ElectronJS",
+                        "Embedded Systems", 
+                        "Embedded Software Programming", 
+                        "Embedded Operating Systems", 
+                        "Ember.js", 
+                        "Encryption", 
+                        "Engineering Design", 
+                        "Erlang", 
+                        "Ethical Hacking", 
+                        "Exploratory Data Analysis", 
+                        "Filming", 
+                        "Film Studies", 
+                        "Financial Accounting", 
+                        "Financial Advisory", 
+                        "Financial Analysis", 
+                        "Financial Law", 
+                        "Financial Literacy", 
+                        "Financial Technology",
+                        "Financial Management",
+                        "Finance Consulting", 
+                        "Finance",
+                        "Food Law", 
+                        "Food Safety", 
+                        "Food Science", 
+                        "Foreign Exchange", 
+                        "Fortran", 
+                        "Fraud Analysis", 
+                        "FreeBSD", 
+                        "Front-end Development", 
+                        "Fulfillment Management", 
+                        "Functional Programming", 
+                        "Functional Testing", 
+                        "GIMP", 
+                        "GNOME", 
+                        "GUI Development", 
+                        "GUI Testing",
+                        "Game Design", 
+                        "Game Development", 
+                        "Geography", 
+                        "Geospatial Analysis", 
+                        "Git", 
+                        "Github", 
+                        "Golang", 
+                        "Google Cloud Platform (GCP)", 
+                        "Gradle", 
+                        "Graphic Design", 
+                        "GraphQL", 
+                        "HTML", 
+                        "HTTP/HTTPS",
+                        "HTTP Server", 
+                        "Haskell", 
+                        "Hardware Design", 
+                        "Hardware Development", 
+                        "Hardware Engineering", 
+                        "Hardware Testing", 
+                        "Healthcare", 
+                        "Heroku", 
+                        "Heuristics", 
+                        "History", 
+                        "Human Resource (HR)",
+                        "Hypervirtualisation", 
+                        "Identity and Access Management (IAM)", 
+                        "Illustrator", 
+                        "Image Editing", 
+                        "Incident Response (IR)", 
+                        "Industrial Engineering", 
+                        "Industrial Systems", 
+                        "Insurance", 
+                        "Internet of Things (IoT)", 
+                        "Investing", 
+                        "Investment Banking", 
+                        "JavaScript (JS)",
+                        "Java",
+                        "JavaFX", 
+                        "Java Springboot", 
+                        "Jenkins", 
+                        "JQuery", 
+                        "JQuery UI", 
+                        "JQuery Mobile", 
+                        "Julia", 
+                        "KDE", 
+                        "Kotlin", 
+                        "Law", 
+                        "Leadership", 
+                        "Linux", 
+                        "Life Sciences", 
+                        "Linguistics",
+                        "Lisp", 
+                        "Log Analysis",
+                        "Lua", 
+                        "MATE", 
+                        "Mac OS", 
+                        "Machine Learning",
+                        "Machine Translation", 
+                        "Malware",
+                        "Management",
+                        "Marine Biology", 
+                        "Marine Sciences", 
+                        "Marine Research", 
+                        "Maritime Law", 
+                        "Maritime Operations", 
+                        "Markdown", 
+                        "Marketing",
+                        "Mass Communication", 
+                        "Material Design", 
+                        "Material Research", 
+                        "Mathematics", 
+                        "Mechanical Engineering",
+                        "Mechanical Design", 
+                        "Media Design", 
+                        "Media Development", 
+                        "Medical Law", 
+                        "Medicine", 
+                        "Mental Health", 
+                        "Mergers and Acquisitions (M&A)", 
+                        "Microsoft Suite", 
+                        "Mobile Application Development", 
+                        "Mobile Game Development", 
+                        "Mobile User Experience Design", 
+                        "Mobile User Interface Design", 
+                        "MongoDB", 
+                        "Music", 
+                        "MySQL", 
+                        "Natural Language Processing (NLP)", 
+                        "Natural Language Generation (NLG)", 
+                        "Neo4j",
+                        "Network Scanning",
+                        "Neural Network", 
+                        "NodeJS", 
+                        "NoSQL", 
+                        "Nvidia", 
+                        "Obfuscation", 
+                        "Objective C", 
+                        "Object-oriented Programming", 
+                        "Object-relational Mapping", 
+                        "Operating System", 
+                        "Operational Law", 
+                        "Operational Management", 
+                        "Opera", 
+                        "Opera Suite", 
+                        "PHP Laravel",
+                        "PHP", 
+                        "Pascal", 
+                        "PayPal", 
+                        "Penetration Testing", 
+                        "Perl", 
+                        "Persuasion", 
+                        "Pharmaceuticals", 
+                        "Photography", 
+                        "Physics", 
+                        "Planning", 
+                        "Political Science",
+                        "Power BI", 
+                        "Presentation", 
+                        "Privilege Escalation", 
+                        "Process Analysis", 
+                        "Product Design", 
+                        "Product Management", 
+                        "Project Design", 
+                        "Project Management", 
+                        "Programming", 
+                        "Psychology", 
+                        "Psychiatry", 
+                        "Public Policy", 
+                        "Public Speaking", 
+                        "Publicity", 
+                        "Python Django", 
+                        "Python Flask", 
+                        "Python Kivy", 
+                        "Python Matplotlib", 
+                        "Python Numpy",
+                        "Python Pandas", 
+                        "Python Sci-kit Learn", 
+                        "Python SciPy", 
+                        "Python",
+                        "Pytorch", 
+                        "Quality Assurance", 
+                        "R",
+                        "ReactJS", 
+                        "React Native", 
+                        "Real Estate", 
+                        "Reconnaisance",
+                        "Redis", 
+                        "Red Team",
+                        "Research and Development (R&D)", 
+                        "Research", 
+                        "Retail Design", 
+                        "Retail", 
+                        "Risk Analysis", 
+                        "Robotics", 
+                        "Root Cause Analysis", 
+                        "Rural Development", 
+                        "Rust", 
+                        "SAP", 
+                        "SASS", 
+                        "SOAP", 
+                        "Safety Administration", 
+                        "Safety Design", 
+                        "Safety Engineering", 
+                        "Sales",
+                        "Salesforce",
+                        "Scala", 
+                        "Sculpting", 
+                        "Security Research", 
+                        "Social Commerce", 
+                        "Social Media", 
+                        "Social Media Advertising", 
+                        "Social Science", 
+                        "Social Work", 
+                        "Sociology", 
+                        "Socket.io", 
+                        "Software Design", 
+                        "Software Development", 
+                        "Soft Skills", 
+                        "Statistics", 
+                        "Stripe", 
+                        "Swift", 
+                        "System Administration", 
+                        "System Testing", 
+                        "Tableau", 
+                        "Tensorflow",
+                        "Time Management", 
+                        "Ubuntu",
+                        "Unix", 
+                        "User Experience (UX)", 
+                        "User Interface (UI)", 
+                        "User Acceptance testing (UAT)", 
+                        "VueJS", 
+                        "VMWare", 
+                        "VirtualBox", 
+                        "Web Application Development", 
+                        "Web Server", 
+                        "Windows", 
+                        "Writing", 
+                        "Xamarin", 
+                        ".NET",
+                    ];
+
+                    const courses = [
+                        "AV Systems", 
+                        "Accounting", 
+                        "Acturial Sciences", 
+                        "Ad Development", 
+                        "Ad Tracking",  
+                        "Advertising", 
+                        "Aerospace Engineering", 
+                        "Agriculture", 
+                        "Antenna", 
+                        "Applied Mathematics",
+                        "Architecture",
+                        "Artificial Intelligence", 
+                        "Art", 
+                        "Banking", 
+                        "Business Administration", 
+                        "Business Management", 
+                        "Biology",
+                        "Chemical Engineering", 
+                        "Chemistry",
+                        "Cloud Computing", 
+                        "Cloud Deployment", 
+                        "Cloud Development", 
+                        "Computer Graphics", 
+                        "Computer Networking",
+                        "Computer Science", 
+                        "Customer Relationship Management (CRM)",
+                        "Cyber-physical Systems",
+                        "Cyber-security",
+                        "Data Science", 
+                        "Data Analytics", 
+                        "Database Management", 
+                        "Data Engineering", 
+                        "Design",
+                        "Economics", 
+                        "Education", 
+                        "Electrical Engineering", 
+                        "Embedded Systems", 
+                        "Engineering Design", 
+                        "Ethical Hacking", 
+                        "Filming", 
+                        "Film Studies", 
+                        "Financial Accounting", 
+                        "Financial Advisory", 
+                        "Financial Analysis", 
+                        "Financial Literacy", 
+                        "Financial Technology",
+                        "Financial Management",
+                        "Finance Consulting", 
+                        "Finance",
+                        "Food Science", 
+                        "Fulfillment Management", 
+                        "Game Design", 
+                        "Game Development", 
+                        "Geography", 
+                        "Geospatial Analysis", 
+                        "Graphic Design", 
+                        "Hardware Design", 
+                        "Hardware Development", 
+                        "Hardware Engineering", 
+                        "Healthcare", 
+                        "History", 
+                        "Human Resource (HR)",
+                        "Illustrator", 
+                        "Incident Response (IR)", 
+                        "Industrial Engineering", 
+                        "Industrial Systems", 
+                        "Insurance", 
+                        "Internet of Things (IoT)", 
+                        "Investing", 
+                        "Investment Banking", 
+                        "Law", 
+                        "Life Sciences", 
+                        "Linguistics",
+                        "Management",
+                        "Marine Biology", 
+                        "Marine Sciences", 
+                        "Marine Research", 
+                        "Maritime Operations", 
+                        "Marketing",
+                        "Mass Communication", 
+                        "Material Design", 
+                        "Material Research", 
+                        "Mathematics", 
+                        "Mechanical Engineering",
+                        "Media Design", 
+                        "Media Development", 
+                        "Medicine", 
+                        "Music", 
+                        "Operational Law", 
+                        "Operational Management", 
+                        "Pharmaceuticals", 
+                        "Photography", 
+                        "Physics", 
+                        "Political Science",
+                        "Product Design", 
+                        "Product Management", 
+                        "Project Management", 
+                        "Psychology", 
+                        "Psychiatry", 
+                        "Public Policy", 
+                        "Publicity", 
+                        "Quality Assurance", 
+                        "Real Estate", 
+                        "Research and Development (R&D)", 
+                        "Research", 
+                        "Retail Design", 
+                        "Retail", 
+                        "Risk Analysis", 
+                        "Robotics", 
+                        "Safety Administration", 
+                        "Sales",
+                        "Security Research", 
+                        "Social Commerce", 
+                        "Social Science", 
+                        "Social Work", 
+                        "Sociology", 
+                        "Software Design", 
+                        "Software Development", 
+                        "Statistics", 
+                        "System Administration", 
+                        "User Experience (UX)", 
+                        "User Interface (UI)", 
+                        "Web Application Development"
+                    ];
+
+                    const amount = 1.00;
+
+                    const phoneNumHeader = ["8", "9"];
+                    const genders = ["M", "F", "O"];
+                    const schools = ["NUS", "NTU", "SMU", "SUTD", "SIT", "SUSS", "SIM"];
+                    const competitionType = ["Hackathon", "Competition", "Case Competition"];
+
+                    const csvHeader = "data:text/csv;charset=utf-8,";
+
+                    // User.csv for User table
+                    const userFile = [];
+                    for (let i = 0; i < num; i++) {
+                        let temp = [];
+                        userFile.push(temp);
+                    }
+                    for (let i of userFile) {
+                        i.push(faker.internet.userName());
+                        i.push("$2y$10$rF6mIBumpp2DCJN/fpJKCuoNmgkbaT65eqk3W9DgUb42ZiJI2vntS"); // testPass
+                        i.push(faker.name.findName());
+                        i.push(Math.floor((Math.random() * 9) + 18));
+                        let tempPhoneNumber = faker.phone.phoneNumberFormat();
+                        i.push(phoneNumHeader[Math.random() >= 0.5 ? 1 : 0] + tempPhoneNumber.substring(0,3) + tempPhoneNumber.substring(4,7) + tempPhoneNumber[8]);
+                        i.push(faker.internet.email());
+                        let tempGender = Math.floor(Math.random() * 3);
+                        i.push(genders[tempGender]);
+                        i.push("NULL");
+                        let tempTextNum = Math.floor(Math.random() * 10);
+                        let tempText = "";
+                        for (let j = 0; j < tempTextNum; j++) {
+                            tempText += skills[Math.floor(Math.random() * skills.length)] + " ";
+                        }
+                        i.push(tempText);
+                        i.push(schools[Math.floor(Math.random() * schools.length)]);
+                        i.push(Math.floor(Math.random() * 4) + 1);
+                        i.push(courses[Math.floor(Math.random() * courses.length)]);
+                        i.push("2021-10-19 00:00:01");
+                        i.push("NULL");
+                    }
+                    this.files.push({
+                        name: filenames[0] + ".csv", 
+                        headers: [
+                            "username", 
+                            "password_hash", 
+                            "name", 
+                            "age", 
+                            "mobile_number", 
+                            "email", 
+                            "gender", 
+                            "image_name", 
+                            "interest", 
+                            "school", 
+                            "year_of_study", 
+                            "course", 
+                            "date_start", 
+                            "date_end"
+                        ], 
+                        data: userFile
+                    }); 
+                    let tempData = this.files[0].headers.join(",") + "\n";
+                    userFile.forEach((row) => {
+                        tempData += row.join(","); 
+                        tempData += "\n";
+                    });
+                    this.fileLinks.push(csvHeader + encodeURI(tempData));
+
+                    // Skill.csv for Skill table
+                    let skillFile = [];
+                    for (let elem of skills) {
+                        skillFile.push([elem]);
+                    }
+                    this.files.push({
+                        name: filenames[1] + ".csv", 
+                        headers: [
+                            "name"
+                        ],
+                        data: skillFile
+                    });
+                    tempData = this.files[1].headers.join(",") + "\n";
+                    skillFile.forEach((row) => {
+                        tempData += row.join(","); 
+                        tempData += "\n";
+                    });
+                    this.fileLinks.push(csvHeader + encodeURI(tempData));
+
+                    // Competition.csv for Competition table
+                    const compFile = [];
+                    for (let i = 0; i < Math.floor(num / 10); i++) {
+                        let temp = [];
+                        compFile.push(temp);
+                    }
+                    for (let i of compFile) {
+                        i.push(faker.company.companyName() + " " + courses[Math.floor(Math.random() * courses.length)] + " " + competitionType[Math.floor(Math.random() * competitionType.length)]);
+                        i.push("These are the instructions for joining the competition as well as what the competition is about. " + faker.lorem.sentence(10)); 
+                        i.push("NULL");
+                        i.push("NULL");
+                        i.push("NULL");
+                        i.push(1);
+                        i.push("NULL");
+                        i.push("2021-10-19 00:00:01");
+                        i.push("NULL");
+                    }
+                    this.files.push({
+                        name: filenames[2] + ".csv", 
+                        headers: [
+                            "name", 
+                            "description", 
+                            "age_min", 
+                            "age_max", 
+                            "image_name", 
+                            "year_of_study_min", 
+                            "year_of_study_max", 
+                            "date_start", 
+                            "date_end"
+                        ], 
+                        data: compFile
+                    }); 
+                    tempData = this.files[2].headers.join(",") + "\n";
+                    compFile.forEach((row) => {
+                        tempData += row.join(","); 
+                        tempData += "\n";
+                    });
+                    this.fileLinks.push(csvHeader + encodeURI(tempData));
+
+                    // Fee.csv for Fee table
+                    this.files.push({
+                        name: filenames[3] + ".csv", 
+                        headers: [
+                            "amount", 
+                            "date_start", 
+                        ],
+                        data: [
+                            [amount, "2021-10-18 00:00:01"]
+                        ]
+                    });
+                    tempData = this.files[3].headers.join(",") + "\n";
+                    this.files[3].data.forEach((row) => {
+                        tempData += row.join(","); 
+                        tempData += "\n";
+                    });
+                    this.fileLinks.push(csvHeader + encodeURI(tempData));
+
+                    // User_Skill.csv for User_Skill table
+                    let userSkillFile = []; 
+                    for (let i in userFile) {
+                        let tempMax = Math.floor(Math.random() * 3) + 1;
+                        let tempStore = [];
+                        for (let j = 0; j < tempMax; j++) {
+                            let tempIdx = Math.floor(Math.random() * skills.length);
+                            if (!tempStore.includes(tempIdx)) {
+                                tempStore.push(tempIdx);
+                            }
+                        }
+                        for (let idx of tempStore) {
+                            userSkillFile.push([parseInt(i) + 1, parseInt(idx) + 1, Math.floor(Math.random() * 3) + 1]);
+                        }
+                    }
+                    this.files.push({
+                        name: filenames[4] + ".csv", 
+                        headers: [
+                            "user_id", 
+                            "skill_id",
+                            "proficiency"
+                        ],
+                        data: userSkillFile
+                    });
+                    tempData = this.files[4].headers.join(",") + "\n";
+                    userSkillFile.forEach((row) => {
+                        tempData += row.join(","); 
+                        tempData += "\n";
+                    });
+                    this.fileLinks.push(csvHeader + encodeURI(tempData));
+
+                    // User_Lacks.csv for User_Lacks table
+                    let userLacksFile = []; 
+                    for (let i in userFile) {
+                        let tempMax = Math.floor(Math.random() * 2) + 1;
+                        let tempStore = [];
+                        for (let j = 0; j < tempMax; j++) {
+                            let tempIdx = Math.floor(Math.random() * skills.length);
+                            if (!tempStore.includes(tempIdx)) {
+                                tempStore.push(tempIdx);
+                            }
+                        }
+                        for (let idx of tempStore) {
+                            userLacksFile.push([parseInt(i) + 1, parseInt(idx) + 1]);
+                        }
+                    }
+                    this.files.push({
+                        name: filenames[5] + ".csv", 
+                        headers: [
+                            "user_id", 
+                            "skill_id"
+                        ],
+                        data: userLacksFile
+                    });
+                    tempData = this.files[5].headers.join(",") + "\n";
+                    userLacksFile.forEach((row) => {
+                        tempData += row.join(","); 
+                        tempData += "\n";
+                    });
+                    this.fileLinks.push(csvHeader + encodeURI(tempData));
+
+                    this.isGenerated = true;
+                }
+            }
+        }); 
+
+        app.mount("#app");
+    </script>
+</body>
+</html>

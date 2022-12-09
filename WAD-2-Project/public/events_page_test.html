@@ -1,0 +1,433 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css"></link>
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- External events_page.css -->
+    <link rel="stylesheet" href="assets/css/events_page.css"><link>
+    <!-- Custom Font -->
+    <link rel="stylesheet" href="assets/css/fonts.css"><link>
+    <!-- Home Page Custom -->
+    <link rel="stylesheet" href="assets/css/home_page.css"><link>
+    <!-- Using Vue.js CDN -->
+    <script src="https://unpkg.com/vue@next"></script>
+    <!-- Axios CDN -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    
+    <!------------------------------ NOTE --------------------------------------------------------->
+    <!---------------------- Design and codes referenced from www.sandboxsg.com ------------------->
+    <!-- I hereby declare I do not own any of the codes and it belongs rightfully to the owner ---->
+    <!------------------------------ NOTE --------------------------------------------------------->
+
+    <title>Hackathons and Competitions in Singapore - RevFlair</title>
+  </head>
+
+  <body id = "app">
+    <nav class="navbar navbar-light bg-light fixed-top" id="top-nav">
+      <div class="container-fluid d-inline">
+          <div class="row justify-content-between">
+              <div class="col-4 col-md-3 text-start d-flex align-items-center">
+                  <a id="logo-wrapper" class="d-inline-block ms-3 me-4" href="#">
+                      <span id="logo" class="material-icons md-light md-24 d-inline-block d-flex justify-content-center align-items-center">logo_dev</span>
+                  </a>
+                  <a id="menu-icon-wrapper" class="d-inline-block ms-3 me-4" href="#" @click="toggleNav()">
+                      <span id="menu-icon" class="material-icons md-light md-inactive md-24 d-inline-block d-flex justify-content-center align-items-center">widgets</span>
+                  </a>
+                  <a id="mobile-menu-icon-wrapper" class="d-inline-block ms-3 me-4" href="#" @click="toggleNavMobile()">
+                      <span id="mobile-menu-icon" class="material-icons md-inactive md-24 d-inline-block d-flex justify-content-center align-items-center">menu</span>
+                  </a>
+              </div>
+              <div id="top-nav-search" class="col-md-3">
+                  <form class="d-flex">
+                      <input class="form-control me-2 body-font search-bar" type="search" placeholder="Enter your search here ..." aria-label="Search">
+                      <button class="btn btn-outline-light d-inline-flex align-items-center search-bar-btn" type="submit"><span class="material-icons md-24">search</span></button>
+                  </form>
+              </div>
+              <div class="col-4 col-md-3 text-end d-flex align-items-center justify-content-end">
+                  <a id="notif-wrapper" class="d-inline-block me-3 ms-4" href="#">
+                      <span id="notif-icons" class="material-icons md-light md-24 d-inline-block d-flex justify-content-center align-items-center">notifications</span>
+                  </a>
+                  <a id="profile-wrapper" class="d-inline-block me-3 ms-4" href="#">
+                      <span id="profile" class="material-icons md-light md-24 d-inline-block d-flex justify-content-center align-items-center">account_circle</span>
+                  </a>
+                  <a id="mobile-search-wrapper" class="d-inline-block me-3 ms-4" href="#" @click="mobileSearch()">
+                      <span id="mobile-search" class="material-icons md-light md-24 d-inline-block d-flex justify-content-center align-items-center">{{mobileSearchIcon}}</span>
+                  </a>
+              </div>
+          </div>
+      </div>
+      <div id="mobile-search-bar" class="container-fluid py-3">
+          <div class="col-12">
+              <form class="d-flex">
+                  <input class="form-control me-2 body-font search-bar" type="search" placeholder="Enter your search here ..." aria-label="Search">
+                  <button class="btn btn-outline-light d-inline-flex align-items-center search-bar-btn" type="submit"><span class="material-icons md-24">search</span></button>
+              </form>
+          </div>
+      </div>
+  </nav>
+
+  <div id="side-nav-short" class="closed">
+      <ul class="nav flex-column">
+          <li class="nav-item">
+              <a class="nav-link active side-icon" aria-current="page" href="#">
+                  <span class="material-icons md-24 d-inline-flex justify-content-center align-items-center menu-option" 
+                      data-bs-toggle="tooltip" data-bs-placement="right" data-bs-template='<div class="tooltip" role="tooltip"><div class="tooltip-inner body-font"></div></div>' title="Home">
+                      home
+                  </span>
+              </a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link side-icon" aria-current="page" href="#">
+                  <span class="material-icons md-24 d-inline-flex justify-content-center align-items-center menu-option" 
+                      data-bs-toggle="tooltip" data-bs-placement="right" data-bs-template='<div class="tooltip" role="tooltip"><div class="tooltip-inner body-font"></div></div>' title="Matches">
+                      person_add
+                  </span>
+              </a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link side-icon" aria-current="page" href="#">
+                  <span class="material-icons md-24 d-inline-flex justify-content-center align-items-center menu-option" 
+                      data-bs-toggle="tooltip" data-bs-placement="right" data-bs-template='<div class="tooltip" role="tooltip"><div class="tooltip-inner body-font"></div></div>' title="Connections">
+                      person_search
+                  </span>
+              </a>
+          </li>
+      </ul>
+  </div>
+
+  <div id="side-nav" class="opened">
+      <ul class="nav flex-column">
+          <li class="nav-item">
+              <a class="nav-link active side-icon d-inline-block mx-3 my-2 d-inline-flex align-items-center" aria-current="page" href="#">
+                  <span class="material-icons md-24 d-inline-flex justify-content-center align-items-center pe-2">
+                      home
+                  </span>
+                  <span class="d-inline-flex justify-content-center align-items-center body-font icon-label">
+                      Home
+                  </span>
+              </a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link side-icon d-inline-block mx-3 my-2 d-inline-flex align-items-center" aria-current="page" href="#">
+                  <span class="material-icons md-24 d-inline-flex justify-content-center align-items-center pe-2">
+                      person_add
+                  </span>
+                  <span class="d-inline-flex justify-content-center align-items-center body-font icon-label">
+                      Matches
+                  </span>
+              </a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link side-icon d-inline-block mx-3 my-2 d-inline-flex align-items-center" aria-current="page" href="#">
+                  <span class="material-icons md-24 d-inline-flex justify-content-center align-items-center pe-2">
+                      person_search
+                  </span>
+                  <span class="d-inline-flex justify-content-center align-items-center body-font icon-label">
+                      Connections
+                  </span>
+              </a>
+          </li>
+      </ul>
+  </div>
+
+  <div id="side-nav-mobile">
+      <div id="side-nav-mobile-top" class="d-flex flex-column justify-content-evenly align-items-center">
+          <button type="button" class="btn-close btn-close-white align-self-end" aria-label="Close" @click="toggleNavMobile()"></button>
+          <a class="btn btn-primary body-font" id="mobile-top-btn-profile" href="#" role="button">Profile</a>
+          <a class="btn btn-primary body-font" id="mobile-top-btn-logout" href="#" role="button">Logout</a>
+      </div>
+      <div class="ps-4 body-font fs-5">Components</div>
+      <ul class="nav flex-column">
+          <li class="nav-item">
+              <a class="nav-link active side-icon d-inline-block mx-3 my-2 d-inline-flex align-items-center" aria-current="page" href="#">
+                  <span class="material-icons md-24 d-inline-flex justify-content-center align-items-center pe-2">
+                      home
+                  </span>
+                  <span class="d-inline-flex justify-content-center align-items-center body-font icon-label">
+                      Home
+                  </span>
+              </a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link side-icon d-inline-block mx-3 my-2 d-inline-flex align-items-center" aria-current="page" href="#">
+                  <span class="material-icons md-24 d-inline-flex justify-content-center align-items-center pe-2">
+                      person_add
+                  </span>
+                  <span class="d-inline-flex justify-content-center align-items-center body-font icon-label">
+                      Matches
+                  </span>
+              </a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link side-icon d-inline-block mx-3 my-2 d-inline-flex align-items-center" aria-current="page" href="#">
+                  <span class="material-icons md-24 d-inline-flex justify-content-center align-items-center pe-2">
+                      person_search
+                  </span>
+                  <span class="d-inline-flex justify-content-center align-items-center body-font icon-label">
+                      Connections
+                  </span>
+              </a>
+          </li>
+      </ul>
+  </div>
+
+  <div id="mobile-modal-bg"></div>
+
+         
+  <!-- Main Content -->
+  <div id = "main-content"> 
+  <div class = "container px-3 py-3" >
+    <div class = "row">
+        <!-- First column-->
+        <div class = "col-md-6">
+          <h2 class = "title_heading"> A Hackathon for Everyone </h2>
+          <p class = "title_description">
+            We collate competitions from both local and
+            international scenes, ranging from the most beginner-friendly
+            to expert-level. All competitions listed on
+            RevFlair Singapore are free to participate!
+            <br>
+            <br>
+            First time participating in one? Do not worry! Try out any of the beginner
+            hackathons. All you need to do is to keep an open mind about it! 
+            You may also partner up with people of similar skill sets from our site!
+          </p>
+          <p>
+            <a class="btn" href="#hackathonlist" role="button" style="background-color:#7395AE">Get started »</a>
+          </p>
+        </div>
+
+        <!-- Second column for spacing -->
+        <div class="col-md-1 py-3"></div>
+
+        <!-- Third column for video -->
+        <div class="col-md-5 py-3">
+          <video playsinline="" autoplay="" muted="" loop="" width="100%">
+              <source src="./images/start_up_video.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+    </div>
+
+    <div class = "container px-3 py-3">
+      <!-- divider -->
+      <hr>
+      <!-- divider -->
+      <h1 class = "title_heading" id="hackathonlist"> The Hackathon List </h1>
+      <div class = "title_description"> Last Updated: 30-10-2021 </div>
+      
+      <!-- Search -->
+      <div class="input-group mb-3 mx-auto">
+        <input class="form-control py-2 border-right-0 border" type="search" placeholder="Search for hackathons" id="keyword-search-input" onkeyup="searchKeyword()">
+      </div>
+
+      <!-- Event List -->
+      <div id = "poggers">
+        <div class = "row row-cols-sm-1 row-cols-md-2 row-cols-lg-3 g-4">
+          <!-- Competitions -->
+          <card v-for = "comp in competitions" 
+            v-bind:title = "comp.title"
+            v-bind:header = "comp.header"
+            v-bind:description = "comp.description"
+            v-bind:difficulty = "comp.difficulty"
+            v-bind:type = "comp.type"
+            v-bind:team = "comp.team"
+            v-bind:status = "comp.status"
+            v-bind:link = "comp.link"
+            v-bind:image = "comp.imgsrc"
+            v-bind:register_by = "comp.register_by"
+            v-bind:submit_by = "comp.submit_by">
+          </card>
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel">
+                          HackathonName
+                      </h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                      <div class="text-center my-3">
+                          <img id="modal_image" src="" alt="Hackathon Image" style="height: 100%; width: 50%; object-fit: contain">
+                      </div>
+
+                      <div id="modal_description" class="mb-3"></div>
+
+                      <div class="mb-3" id="modal_color_exp" title="Experience" style="
+                        background-color: #7395AE;
+                        border-radius: 10px;
+                        text-align: left;
+                        text-indent: 1em;
+                        ">
+                          Difficulty:
+                      </div>
+                      <div class="mb-3" id="modal_color_type" title="Type" style="
+                        background-color: #557A95;
+                        border-radius: 10px;
+                        text-align: left;
+                        text-indent: 1em;
+                        ">
+                          Type: 
+                      </div>
+                      <div class="mb-3" id="modal_color_team" title="Number of Team Members" style="
+                        background-color: #B1A296;
+                        border-radius: 10px;
+                        text-align: left;
+                        text-indent: 1em;
+                        ">
+                          Team: 
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                          Close
+                      </button>
+                      <a href="" target="_blank" class="btn btn-primary" id="modal_link">View
+                          Website</a>
+                  </div>
+              </div>
+          </div>
+      </div>
+    </div>
+  </div>
+  </div>
+    
+
+  
+    
+    <!-- Javascript Function -->
+    <script>
+      // To search for events 
+      function searchKeyword() {
+        var allHackathons = Array.from(document.getElementsByClassName("hackathon-card"))
+        var search = document.getElementById("keyword-search-input").value.toLowerCase()
+        allHackathons.map(x => { 
+            hackathonName = x.getAttribute("data-value").toLowerCase()
+            if (hackathonName.includes(search)) {
+                x.style.display = "block";
+            }
+            else {
+                x.style.display = "none";
+            }
+        });
+    }
+
+        // Modal
+        var exampleModal = document.getElementById("exampleModal");
+        exampleModal.addEventListener("show.bs.modal", function (event) {
+        // Button that triggered the modal
+        var button = event.relatedTarget;
+        // Extract info from data-bs-* attributes
+        var hackathonName = button.getAttribute("data-bs-hackathonName");
+        var link = button.getAttribute("data-bs-link");
+        var modalTitle = exampleModal.querySelector(".modal-title");
+        var hackathon_telegram_id = 13;
+        modalTitle.textContent = `${hackathonName}`;
+        document.getElementById(`modal_description`).innerText = document.getElementById(`${hackathonName}_description`).innerText;
+        document.getElementById(`modal_image`).src = document.getElementById(`${hackathonName}_image`).src;
+
+        document.getElementById(`modal_link`).href = link;
+        document.getElementById(`modal_link`).rel = "nofollow";
+
+        document.getElementById(`modal_color_exp`).innerText = document.getElementById(`${hackathonName}_color_exp`).innerText;
+        document.getElementById(`modal_color_type`).innerText = document.getElementById(`${hackathonName}_color_type`).innerText;
+        document.getElementById(`modal_color_team`).innerText = document.getElementById(`${hackathonName}_color_team`).innerText;
+    });
+
+    </script>
+
+    <script>
+        
+        const poggers = Vue.createApp({
+            data() {
+                return {
+                    competitions: [ {title: "MLDA DLW HACKATHON", header: "NTU MLDA", description: "DLW Hackathon is a 48-hour virtual Hackathon, dedicated to hacks with Machine Learning and Artificial Intelligence (ML/AI), conducted fully virtual in Gather.town", difficulty: "Beginner", type: "Machine Learning", team: "1-4", 
+                    status: "Open for Registration", link: "https://www.ntu.edu.sg/eee/student-life/mlda/deep-learning-week/deep-learning-week-2021/mlda-dlw-hackathon"
+                    , imgsrc: "mlda2021.png", register_by: "12 December 2021", submit_by : "12 December 2021" }, 
+
+                    {title: "DSC Solution Challenge", header: "Google", description: "The Google Developer Student Clubs - 2021 Solution Challenge mission is to solve for one or more of the United Nations 17 Sustainable Development Goals using Google technology.", difficulty: "Advanced", type: "Software Development", team: "1-5", 
+                    status: "Open for Registration", link: "https://developers.google.com/community/gdsc-solution-challenge"
+                    , imgsrc: "dsc2021.png" , register_by: "30 November 2021", submit_by : "30 November 2021"  },
+
+                    {title: "The Data Open 2021", header: "Citadel", description: "Citadel is proud to present The Data Open, a datathon competition taking place throughout the year at a series of top universities. At each event, participants work in teams to or through a large and complex dataset and then present their findings to a panel of judges.", difficulty: "Advanced", type: "Quant", team: "1", 
+                    status: "Open for Registration", link: "https://www.citadel.com/careers/the-data-open/apply/?apply_to=apac-datathon-spring-2021"
+                    , imgsrc: "dataopen2021.png" , register_by: "15 November 2021", submit_by : "15 November 2021"  }
+                
+                    ]
+                }
+            }
+        })
+
+            poggers.component('card', {
+                props: ['title' , 'header', 'description', 'difficulty', 'type', 'team', 'status', 'link', 'image', 'register_by', 'submit_by'],
+                template: `<div class="col px-3 hackathon-card" v-bind:data-value="title" >
+                <div class="card h-100">
+                    <div class="card-header text-center text-bold" style="background-color: #00ff88!important;">{{ status }}</div>
+                        <div class="row g-0 mx-3">
+                        <div class="mx-auto text-center" style="height:200px;">
+                            <img v-bind:src=" 'images/' + image " v-bind:id="title+ '_image'" alt="Hackathon Image" style="height: 100%; width: 100%; object-fit: contain">
+                        </div>
+                        <div class="card-body">
+                
+                        <div class="chaeyoung">
+                            <div class="mb-3" style="background-color:#379683;border-radius:10px;text-align:center">
+                            <b> {{ header }} </b> </div>
+                            
+                            <h5 class="card-title"> {{ title }}</h5>
+                            
+                            <p class="card-text my-2" v-bind:id="title + '_description'" style="font-family: Arial, Helvetica, sans-serif;"> 
+                                {{ description }}
+                            </p>
+                        </div>
+                        
+                        
+                        <p class="card-text my-0"><small class="text-muted">Register by: {{ register_by }} </small></p>
+                        
+                        <p class="card-text"><small class="text-muted">Submit by: {{ submit_by }} </small></p>
+                            <div class="row-cols-1">
+                                <div class="mb-3" v-bind:id="title + '_color_exp'" title="Experience" style="background-color:#7395AE;border-radius:10px;text-align:left;text-indent: 1em">         
+                                    Difficulty: {{ difficulty }} 
+                                </div>
+                                <div class="mb-3" v-bind:id="title + '_color_type'" title="Type" style="background-color:#557A95;border-radius:10px;text-align:left;text-indent: 1em;">   
+                                    Type: {{ type }} 
+                                </div>
+                                <div class="mb-3" v-bind:id="title + '_color_team'" title="Number of Team Members" style="background-color:#B1A296;border-radius:10px;text-align:left;text-indent: 1em;">   Team: {{ team }} 
+                                </div>
+                            </div>
+                        
+                            <button type="button" class="btn" style="background-color:#7395AE"  data-bs-toggle="modal" data-bs-target="#exampleModal" v-bind:data-bs-hackathonname="title" v-bind:data-bs-link="link">Learn More</button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div> `
+        })
+
+        poggers.mount("#poggers")
+
+    </script>
+
+
+    <!-- Bootstrap  -->
+    <!-- <script src="assets/js/bootstrap.bundle.min.js"></script> -->
+
+    <!-- Vue -->
+    <!--<script src="assets/js/vue.global.js"></script>-->
+    
+    <!-- Axios -->
+    <!-- <script src="assets/js/axios.min.js"></script> -->
+    
+    <!-- Home Page Custom -->
+    <!-- <script src="assets/js/home_page.js"></script>  --> 
+
+  </body>
+</html>

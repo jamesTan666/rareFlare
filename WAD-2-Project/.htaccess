@@ -1,0 +1,2 @@
+# RewriteEngine on
+# RewriteRule ^((?!public/index\.php).*)$ public/index.php/$1 [L]

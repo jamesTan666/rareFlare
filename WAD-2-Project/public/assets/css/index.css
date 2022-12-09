@@ -1,0 +1,35 @@
+#top-bar {
+    position: sticky;
+    top: 0;
+    z-index: 3000;
+    color: #379683!important;
+}
+
+header a.nav-link {
+    color: inherit!important;
+    text-decoration: none!important;
+}
+
+header a.nav-link:hover {
+    color: inherit!important;
+    text-decoration: underline!important;
+}
+
+header a.btn.nav-link {
+    color: white!important;
+    background-color: #379683!important;
+    text-decoration: none!important;
+    border-color: #379683!important;
+    font-size: inherit!important;
+}
+
+header a.btn.nav-link:hover {
+    translate: -2px -2px;
+    box-shadow: 4px 7px 12px 0 rgba(55, 150, 131, 0.4);
+    font-size: inherit!important;
+}
+
+.logo {
+    height: 35px;
+    width: 139px;
+}

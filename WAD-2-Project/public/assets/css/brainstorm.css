@@ -1,0 +1,47 @@
+html,
+body {
+    width: 100%;
+    height: 100%;
+}
+
+* {
+    font-family: Helvetica, Verdana, sans-serif;
+}
+
+.controls {
+    background-color: #AAAAAA;
+    font-weight: bold;
+    font-size: smaller;
+    width: 100%;
+}
+
+.controls select,
+label {
+    margin: 3px;
+}
+
+.controls select {
+    font-family: monospace;
+    font-size: medium;
+}
+
+.dcanvas {
+    position: relative;
+    width: 100%;
+    height: 300%;
+}
+
+canvas {
+    background-color: #333333;
+    width: 100%;
+    height: 100%;
+}
+
+.status {
+    color: #FFFFFF;
+    position: absolute;
+    top: 0;
+    cursor: default;
+    font-weight: bold;
+    margin: 10px;
+}

@@ -1,0 +1,13 @@
+{
+  "require": {
+    "php": "^7.4.16",
+    "firebase/php-jwt": "^5.4",
+    "mongodb/mongodb": "^1.10",
+    "phpmailer/phpmailer": "^6.5",
+    "stripe/stripe-php": "^7.86",
+    "ext-mongodb": "*",
+    "deanblackborough/php-quill-renderer": "^4.00",
+    "cboden/ratchet": "^0.4.3"
+  }
+
+}

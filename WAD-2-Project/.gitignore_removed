@@ -1,0 +1,9 @@
+# Dependencies
+# **/node_modules
+# **/vendor
+
+# Mac Directory files
+**/.DS_store
+
+# Data-related files
+**/data

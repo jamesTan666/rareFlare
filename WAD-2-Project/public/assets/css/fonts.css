@@ -1,0 +1,165 @@
+/* Start of font imports */ 
+
+/* Overpass */ 
+
+@font-face {
+    font-family: "Overpass";
+    font-weight: 100;
+    src: url(../fonts/Overpass/Overpass-Thin.ttf) format("truetype");
+}
+
+@font-face {
+    font-family: "Overpass";
+    font-weight: 100;
+    font-style: italic;
+    src: url(../fonts/Overpass/Overpass-ThinItalic.ttf) format("truetype");
+}
+
+@font-face {
+    font-family: "Overpass";
+    font-weight: 200;
+    src: url(../fonts/Overpass/Overpass-ExtraLight.ttf) format("truetype");
+}
+
+@font-face {
+    font-family: "Overpass";
+    font-weight: 200;
+    font-style: italic;
+    src: url(../fonts/Overpass/Overpass-ExtraLightItalic.ttf) format("truetype");
+}
+
+@font-face {
+    font-family: "Overpass";
+    font-weight: 300;
+    src: url(../fonts/Overpass/Overpass-Light.ttf) format("truetype");
+}
+
+@font-face {
+    font-family: "Overpass";
+    font-weight: 300;
+    font-style: italic;
+    src: url(../fonts/Overpass/Overpass-LightItalic.ttf) format("truetype");
+}
+
+@font-face {
+    font-family: "Overpass";
+    font-weight: 400;
+    src: url(../fonts/Overpass/Overpass-Regular.ttf) format("truetype");
+}
+
+@font-face {
+    font-family: "Overpass";
+    font-weight: 400;
+    font-style: italic;
+    src: url(../fonts/Overpass/Overpass-Italic.ttf) format("truetype");
+}
+
+@font-face {
+    font-family: "Overpass";
+    font-weight: 600;
+    src: url(../fonts/Overpass/Overpass-SemiBold.ttf) format("truetype");
+}
+
+@font-face {
+    font-family: "Overpass";
+    font-weight: 600;
+    font-style: italic;
+    src: url(../fonts/Overpass/Overpass-SemiBoldItalic.ttf) format("truetype");
+}
+
+@font-face {
+    font-family: "Overpass";
+    font-weight: 700;
+    src: url(../fonts/Overpass/Overpass-Bold.ttf) format("truetype");
+}
+
+@font-face {
+    font-family: "Overpass";
+    font-weight: 700;
+    font-style: italic;
+    src: url(../fonts/Overpass/Overpass-BoldItalic.ttf) format("truetype");
+}
+
+@font-face {
+    font-family: "Overpass";
+    font-weight: 800;
+    src: url(../fonts/Overpass/Overpass-ExtraBold.ttf) format("truetype");
+}
+
+@font-face {
+    font-family: "Overpass";
+    font-weight: 800;
+    font-style: italic;
+    src: url(../fonts/Overpass/Overpass-ExtraBoldItalic.ttf) format("truetype");
+}
+
+@font-face {
+    font-family: "Overpass";
+    font-weight: 900;
+    src: url(../fonts/Overpass/Overpass-Black.ttf) format("truetype");
+}
+
+@font-face {
+    font-family: "Overpass";
+    font-weight: 900;
+    font-style: italic;
+    src: url(../fonts/Overpass/Overpass-BlackItalic.ttf) format("truetype");
+}
+
+/* Inter */ 
+
+@font-face {
+    font-family: "Inter";
+    font-weight: 100;
+    src: url(../fonts/Inter/static/Inter-Thin.ttf) format("truetype");
+}
+
+@font-face {
+    font-family: "Inter";
+    font-weight: 200;
+    src: url(../fonts/Inter/static/Inter-ExtraLight.ttf) format("truetype");
+}
+
+@font-face {
+    font-family: "Inter";
+    font-weight: 300;
+    src: url(../fonts/Inter/static/Inter-Light.ttf) format("truetype");
+}
+
+@font-face {
+    font-family: "Inter";
+    font-weight: 400;
+    src: url(../fonts/Inter/static/Inter-Regular.ttf) format("truetype");
+}
+
+@font-face {
+    font-family: "Inter";
+    font-weight: 500;
+    src: url(../fonts/Inter/static/Inter-Medium.ttf) format("truetype");
+}
+
+@font-face {
+    font-family: "Inter";
+    font-weight: 600;
+    src: url(../fonts/Inter/static/Inter-SemiBold.ttf) format("truetype");
+}
+
+@font-face {
+    font-family: "Inter";
+    font-weight: 700;
+    src: url(../fonts/Inter/static/Inter-Bold.ttf) format("truetype");
+}
+
+@font-face {
+    font-family: "Inter";
+    font-weight: 800;
+    src: url(../fonts/Inter/static/Inter-ExtraBold.ttf) format("truetype");
+}
+
+@font-face {
+    font-family: "Inter";
+    font-weight: 900;
+    src: url(../fonts/Inter/static/Inter-Black.ttf) format("truetype");
+}
+
+/* End of font imports */ 

@@ -1,0 +1,330 @@
+const app = Vue.createApp({
+    data() {
+        return {
+            toggleNavState: false,
+            toggleNavStateMobile: false,
+            mobileSearchIcon: "search",
+            user_id: null,
+            notifications: [],
+            users: [],
+            portfolios: [],
+            connections: [],
+            // connections: [
+            //     {
+            //         "id": 3,
+            //         "image_name": "Xin_Yee.jpg",
+            //         "name": "Xin Yee",
+            //         "username": "xiny",
+            //         "interest": "Lorem Ipsum",
+            //         "skills": ["one", "two"],
+            //         "school": "SMU",
+            //         "year_of_study": 4,
+            //         "course": "IS",
+            //         "gender": "M"
+            //     },
+            //     {
+            //         "id": 3,
+            //         "image_name": "Xin_Yee.jpg",
+            //         "name": "Xin Yee",
+            //         "username": "xiny",
+            //         "interest": "Lorem Ipsum",
+            //         "skills": ["one", "two"],
+            //         "school": "SMU",
+            //         "year_of_study": 4,
+            //         "course": "IS",
+            //         "gender": "M"
+            //     },
+            //     {
+            //         "id": 3,
+            //         "image_name": "Xin_Yee.jpg",
+            //         "name": "Xin Yee",
+            //         "username": "xiny",
+            //         "interest": "Lorem Ipsum",
+            //         "skills": ["one", "two"],
+            //         "school": "SMU",
+            //         "year_of_study": 4,
+            //         "course": "IS",
+            //         "gender": "M"
+            //     },
+            //     {
+            //         "id": 3,
+            //         "image_name": "Xin_Yee.jpg",
+            //         "name": "Xin Yee",
+            //         "username": "xiny",
+            //         "interest": "Lorem Ipsum",
+            //         "skills": ["one", "two"],
+            //         "school": "SMU",
+            //         "year_of_study": 4,
+            //         "course": "IS",
+            //         "gender": "M"
+            //     },
+            //     {
+            //         "id": 3,
+            //         "image_name": "Xin_Yee.jpg",
+            //         "name": "Xin Yee",
+            //         "username": "xiny",
+            //         "interest": "Lorem Ipsum",
+            //         "skills": ["one", "two"],
+            //         "school": "SMU",
+            //         "year_of_study": 4,
+            //         "course": "IS",
+            //         "gender": "M"
+            //     },
+            //     {
+            //         "id": 3,
+            //         "image_name": "Xin_Yee.jpg",
+            //         "name": "Xin Yee",
+            //         "username": "xiny",
+            //         "interest": "Lorem Ipsum",
+            //         "skills": ["one", "two"],
+            //         "school": "SMU",
+            //         "year_of_study": 4,
+            //         "course": "IS",
+            //         "gender": "M"
+            //     },
+            // ],
+            connectionPage: 0,
+            connectionLength: 0,
+            query: "",
+            connectStatus: "Connect"
+        };
+    },
+    methods: {
+        toggleNav() {
+            /
+* Toggles the side navbar when the viewport is >small breakpoint size
+             */
+            let bodyElem = document.querySelector("#main-content");
+            if (!this.toggleNavState) {
+                let prevElem = document.querySelector("#side-nav-short");
+                setTimeout(() => {
+                    prevElem.style.transform = "translate(-100px)";
+
+                    setTimeout(() => {
+                        prevElem.style.display = "none";
+
+                        let currElem = document.querySelector("#side-nav");
+                        currElem.style.display = "block";
+                        setTimeout(() => {
+                            currElem.style.transform = "translate(195px)";
+                            bodyElem.style.transform = "translate(60px)";
+                        }, 250);
+                    }, 500);
+                }, 0);
+                this.toggleNavState = !this.toggleNavState;
+            } else {
+                let prevElem = document.querySelector("#side-nav");
+                setTimeout(() => {
+                    prevElem.style.removeProperty("transform");
+                    bodyElem.style.removeProperty("transform");
+
+                    setTimeout(() => {
+                        prevElem.style.display = "none";
+
+                        let currElem = document.querySelector("#side-nav-short");
+                        currElem.style.display = "block";
+                        setTimeout(() => {
+                            currElem.style.removeProperty("transform");
+                        }, 250);
+                    }, 500);
+                }, 0);
+                this.toggleNavState = !this.toggleNavState;
+            }
+        },
+        toggleNavMobile() {
+            /
+             * Toggle the side navbar when the viewport is <=small breakpoint
+             */
+            let elem = document.querySelector("#side-nav-mobile");
+            let bgElem = document.querySelector("#mobile-modal-bg");
+            if (this.toggleNavStateMobile) {
+                elem.style.display = "block";
+setTimeout(() => {
+                    elem.style.transform = "translate(300px)";
+                    bgElem.style.display = "block";
+                }, 0);
+                this.toggleNavStateMobile = !this.toggleNavStateMobile;
+            } else {
+                setTimeout(() => {
+                    elem.style.removeProperty("transform");
+                    setTimeout(() => {
+                        elem.style.display = "none";
+                        bgElem.style.display = "none";
+                    }, 250);
+                }, 0);
+                this.toggleNavStateMobile = !this.toggleNavStateMobile;
+            }
+        },
+        mobileSearch() {
+            /**
+             * Toggles the search bar when the viewport is at <=medium breakpoint
+             */
+            let elem = document.querySelector("#mobile-search-bar");
+            if (this.mobileSearchIcon === "search") {
+                elem.style.display = "block";
+                this.mobileSearchIcon = "close";
+            } else {
+                elem.style.display = "none";
+                this.mobileSearchIcon = "search";
+            }
+        },
+        getTruncPaginate(length, page) {
+            let result = [];
+            let right = length - page;
+            if (page <= 11) {
+                for (let i = 1; i <= page; i++) {
+                    result.push(i);
+                }
+            } else {
+                let temp = page - 10;
+                result.push("...");
+                for (let i = temp; i <= page; i++) {
+                    result.push(i);
+                }
+            }
+            if (right <= 10) {
+                for (let i = page + 1; i <= length; i++) {
+                    result.push(i);
+                }
+            } else {
+                let temp = page + 10;
+                for (let i = page + 1; i <= temp; i++) {
+                    result.push(i);
+                }
+                result.push("...");
+            }
+            return result;
+        },
+        updateConnections(page) {
+            let url = "../api/connection.php";
+
+            axios.get(connectionURL, {
+                params: {
+                    user_id: this.user_id,
+                    query: this.query,
+                    page: page,
+                    limit: 10
+                }
+            })
+            .then((response) => {
+                this.connections = response.data.data;
+                this.connectionsPage = response.data.page;
+                this.connectionsLength = response.data.total;
+            })
+            .catch((error) => {
+                console.error(error.message);
+            });
+        },
+        toggleConnect(e) {
+            let state = this.connectStatus;
+            let url = "../api/completeMatch.php";
+
+            switch (state) {
+                case "Approve":
+                    url = "../api/completeRequest.php";
+                    break;
+                case "Pending":
+                    return null;
+                case "Disconnect":
+                    url = "../api/deleteConnection.php";
+                    break;
+            }
+
+            axios.post(url, {
+                match_id: this.user_id
+            })
+            .then((response) => {
+                this.updateConnectStatus();
+            })
+            .catch((error) => {
+                console.error(error.message);
+            });
+        },
+        updateConnectStatus() {
+            let connectStatus = "../api/isConnect.php";
+
+            axios.get(connectStatus, {
+                params: {
+                    user_id: this.user_id
+                }
+            })
+            .then((response) => {
+                this.connectStatus = response.data.status;
+            })
+            .catch((error) => {
+                console.error(error.message);
+            });
+        }
+    },
+    computed() {
+    },
+    created() {
+        this.user_id = document.getElementById("target_user").value;
+let url = '../api/userProfile.php';
+        let portUrl = "../api/getPortfolio.php";
+        let connUrl = "../api/connection.php";
+        let connectStatus = "../api/isConnect.php";
+
+        // Use Axios
+        axios.get(url, {
+            params: {
+                user_id: this.user_id
+            }
+        })
+        .then((response) => {
+            this.users = response.data.data;
+        })
+        .catch((error) => {
+            this.users = {
+                entry : 'There was an error: '
+            };
+        });
+
+        axios.get(portUrl, {
+            params: {
+                user_id: this.user_id
+            }
+        })
+        .then((response) => {
+            this.portfolios = response.data.data;
+        })
+        .catch((error) => {
+            console.error(error.message);
+        });
+
+        axios.get(connUrl, {
+            params: {
+                query: this.query,
+                user_id: this.user_id
+            }
+        })
+        .then((response) => {
+            this.connections = response.data.data;
+            this.connectionsPage = response.data.page;
+            this.connectionsLength = response.data.total;
+        })
+        .catch((error) => {
+            console.error(error.message);
+        });
+
+        axios.get(connectStatus, {
+            params: {
+                user_id: this.user_id
+            }
+        })
+        .then((response) => {
+            this.connectStatus = response.data.status;
+        })
+        .catch((error) => {
+            console.error(error.message);
+        });
+    },
+    mounted() {
+        let tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        let tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        });
+    }
+});
+
+app.mount("#app");

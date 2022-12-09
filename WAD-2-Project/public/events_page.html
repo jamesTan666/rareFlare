@@ -1,0 +1,615 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css"></link>
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- External events_page.css -->
+    <link rel="stylesheet" href="assets/css/events_page.css"><link>
+    <!-- Custom Font -->
+    <link rel="stylesheet" href="assets/css/fonts.css"><link>
+    <!-- Home Page Custom -->
+    <link rel="stylesheet" href="assets/css/home_page.css"><link>
+    <!-- Using Vue.js CDN -->
+    <script src="https://unpkg.com/vue@next"></script>
+    <!-- Axios CDN -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <!------------------------------ NOTE --------------------------------------------------------->
+    <!---------------------- Design and codes referenced from www.sandboxsg.com ------------------->
+    <!-- I hereby declare I do not own any of the codes and it belongs rightfully to the owner ---->
+    <!------------------------------ NOTE --------------------------------------------------------->
+
+    <title>Hackathons</title>
+  </head>
+
+  <body id = "app">
+    <nav class="navbar navbar-light bg-light fixed-top" id="top-nav">
+      <div class="container-fluid d-inline">
+          <div class="row justify-content-between">
+              <div class="col-4 col-md-3 text-start d-flex align-items-center">
+                  <a id="logo-wrapper" class="d-inline-block ms-3 me-4" href="#">
+                      <span id="logo" class="material-icons md-light md-24 d-inline-block d-flex justify-content-center align-items-center">logo_dev</span>
+                  </a>
+                  <a id="menu-icon-wrapper" class="d-inline-block ms-3 me-4" href="#" @click="toggleNav()">
+                      <span id="menu-icon" class="material-icons md-light md-inactive md-24 d-inline-block d-flex justify-content-center align-items-center">widgets</span>
+                  </a>
+                  <a id="mobile-menu-icon-wrapper" class="d-inline-block ms-3 me-4" href="#" @click="toggleNavMobile()">
+                      <span id="mobile-menu-icon" class="material-icons md-inactive md-24 d-inline-block d-flex justify-content-center align-items-center">menu</span>
+                  </a>
+              </div>
+              <div id="top-nav-search" class="col-md-3">
+                  <form class="d-flex">
+                      <input class="form-control me-2 body-font search-bar" type="search" placeholder="Enter your search here ..." aria-label="Search">
+                      <button class="btn btn-outline-light d-inline-flex align-items-center search-bar-btn" type="submit"><span class="material-icons md-24">search</span></button>
+                  </form>
+              </div>
+              <div class="col-4 col-md-3 text-end d-flex align-items-center justify-content-end">
+                  <a id="notif-wrapper" class="d-inline-block me-3 ms-4" href="#">
+                      <span id="notif-icons" class="material-icons md-light md-24 d-inline-block d-flex justify-content-center align-items-center">notifications</span>
+                  </a>
+                  <a id="profile-wrapper" class="d-inline-block me-3 ms-4" href="#">
+                      <span id="profile" class="material-icons md-light md-24 d-inline-block d-flex justify-content-center align-items-center">account_circle</span>
+                  </a>
+                  <a id="mobile-search-wrapper" class="d-inline-block me-3 ms-4" href="#" @click="mobileSearch()">
+                      <span id="mobile-search" class="material-icons md-light md-24 d-inline-block d-flex justify-content-center align-items-center">{{mobileSearchIcon}}</span>
+                  </a>
+              </div>
+          </div>
+      </div>
+      <div id="mobile-search-bar" class="container-fluid py-3">
+          <div class="col-12">
+              <form class="d-flex">
+                  <input class="form-control me-2 body-font search-bar" type="search" placeholder="Enter your search here ..." aria-label="Search">
+                  <button class="btn btn-outline-light d-inline-flex align-items-center search-bar-btn" type="submit"><span class="material-icons md-24">search</span></button>
+              </form>
+          </div>
+      </div>
+  </nav>
+
+  <div id="side-nav-short" class="closed">
+      <ul class="nav flex-column">
+          <li class="nav-item">
+              <a class="nav-link active side-icon" aria-current="page" href="#">
+                  <span class="material-icons md-24 d-inline-flex justify-content-center align-items-center menu-option"
+                      data-bs-toggle="tooltip" data-bs-placement="right" data-bs-template='<div class="tooltip" role="tooltip"><div class="tooltip-inner body-font"></div></div>' title="Home">
+                      home
+                  </span>
+              </a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link side-icon" aria-current="page" href="#">
+                  <span class="material-icons md-24 d-inline-flex justify-content-center align-items-center menu-option"
+                      data-bs-toggle="tooltip" data-bs-placement="right" data-bs-template='<div class="tooltip" role="tooltip"><div class="tooltip-inner body-font"></div></div>' title="Matches">
+                      person_add
+                  </span>
+              </a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link side-icon" aria-current="page" href="#">
+                  <span class="material-icons md-24 d-inline-flex justify-content-center align-items-center menu-option"
+                      data-bs-toggle="tooltip" data-bs-placement="right" data-bs-template='<div class="tooltip" role="tooltip"><div class="tooltip-inner body-font"></div></div>' title="Connections">
+                      person_search
+                  </span>
+              </a>
+          </li>
+      </ul>
+  </div>
+
+  <div id="side-nav" class="opened">
+      <ul class="nav flex-column">
+          <li class="nav-item">
+              <a class="nav-link active side-icon d-inline-block mx-3 my-2 d-inline-flex align-items-center" aria-current="page" href="#">
+                  <span class="material-icons md-24 d-inline-flex justify-content-center align-items-center pe-2">
+                      home
+                  </span>
+                  <span class="d-inline-flex justify-content-center align-items-center body-font icon-label">
+                      Home
+                  </span>
+              </a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link side-icon d-inline-block mx-3 my-2 d-inline-flex align-items-center" aria-current="page" href="#">
+                  <span class="material-icons md-24 d-inline-flex justify-content-center align-items-center pe-2">
+                      person_add
+                  </span>
+                  <span class="d-inline-flex justify-content-center align-items-center body-font icon-label">
+                      Matches
+                  </span>
+              </a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link side-icon d-inline-block mx-3 my-2 d-inline-flex align-items-center" aria-current="page" href="#">
+                  <span class="material-icons md-24 d-inline-flex justify-content-center align-items-center pe-2">
+                      person_search
+                  </span>
+                  <span class="d-inline-flex justify-content-center align-items-center body-font icon-label">
+                      Connections
+                  </span>
+              </a>
+          </li>
+      </ul>
+  </div>
+
+  <div id="side-nav-mobile">
+      <div id="side-nav-mobile-top" class="d-flex flex-column justify-content-evenly align-items-center">
+          <button type="button" class="btn-close btn-close-white align-self-end" aria-label="Close" @click="toggleNavMobile()"></button>
+          <a class="btn btn-primary body-font" id="mobile-top-btn-profile" href="#" role="button">Profile</a>
+          <a class="btn btn-primary body-font" id="mobile-top-btn-logout" href="#" role="button">Logout</a>
+      </div>
+      <div class="ps-4 body-font fs-5">Components</div>
+      <ul class="nav flex-column">
+          <li class="nav-item">
+              <a class="nav-link active side-icon d-inline-block mx-3 my-2 d-inline-flex align-items-center" aria-current="page" href="#">
+                  <span class="material-icons md-24 d-inline-flex justify-content-center align-items-center pe-2">
+                      home
+                  </span>
+                  <span class="d-inline-flex justify-content-center align-items-center body-font icon-label">
+                      Home
+                  </span>
+              </a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link side-icon d-inline-block mx-3 my-2 d-inline-flex align-items-center" aria-current="page" href="#">
+                  <span class="material-icons md-24 d-inline-flex justify-content-center align-items-center pe-2">
+                      person_add
+                  </span>
+                  <span class="d-inline-flex justify-content-center align-items-center body-font icon-label">
+                      Matches
+                  </span>
+              </a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link side-icon d-inline-block mx-3 my-2 d-inline-flex align-items-center" aria-current="page" href="#">
+                  <span class="material-icons md-24 d-inline-flex justify-content-center align-items-center pe-2">
+                      person_search
+                  </span>
+                  <span class="d-inline-flex justify-content-center align-items-center body-font icon-label">
+                      Connections
+                  </span>
+              </a>
+          </li>
+      </ul>
+  </div>
+
+  <div id="mobile-modal-bg"></div>
+
+  <!-- Main Content -->
+  <div id = "main-content">
+    <div class = "container px-3 py-3" >
+      </div>
+      <div class = "container px-3 py-3">
+        <!-- divider -->
+
+        <!-- divider -->
+        <h1 class = "title_heading text-center" id="hackathonlist"> The Hackathon List </h1>
+        <div class = "title_description text-center"> Last Updated: 01-11-2021 </div>
+
+        <!-- Search -->
+        <div class="input-group mb-3 mx-auto">
+          <input class="form-control py-2 border-right-0 border" type="search" placeholder="Search for hackathons" id="keyword-search-input" onkeyup="searchKeyword()">
+        </div>
+
+        <!-- Event List -->
+        <div id = "poggers">
+          <div class = "row row-cols-sm-1 row-cols-md-2 row-cols-lg-3 g-4">
+            <!-- NTU hackathon -->
+            <div class="col px-3 hackathon-card" data-value="NTU MLDA MLDA DLW HACKATHON" style="display: block;">
+              <div class="card h-100">
+                <div class="card-header text-center text-bold" style="background-color: #00ff88!important;">Open for Registration</div>
+                  <div class="row g-0 mx-3">
+                    <div class="mx-auto text-center" style="height:200px;">
+                      <img id="MLDA DLW HACKATHON_image" src="Images/mlda2021.png" alt="Hackathon Image" style="height: 100%; width: 100%; object-fit: contain">
+                    </div>
+                  <div class="card-body">
+
+                    <div class="chaeyoung">
+                      <div class="mb-3" style="background-color:#379683;border-radius:10px;text-align:center">
+                        <b>NTU MLDA</b> </div>
+
+                      <h5 class="card-title">MLDA DLW HACKATHON</h5>
+                      <p class="card-text my-2" id="MLDA DLW HACKATHON_description" style="font-family: Arial, Helvetica, sans-serif;">DLW Hackathon is a 48-hour virtual Hackathon, dedicated to hacks
+                      with Machine Learning and Artificial Intelligence (ML/AI), conducted fully virtual in Gather.town</p>
+                    </div>
+
+                    <p class="card-text my-0"><small class="text-muted">Register by: 12 December 2021</small></p>
+                    <p class="card-text"><small class="text-muted">Submit by: 12 December 2021</small></p>
+                    <div class="row-cols-1">
+                      <div class="mb-3" id="MLDA DLW HACKATHON_color_exp" title="Experience" style="background-color:#7395AE;border-radius:10px;text-align:left;text-indent: 1em;">   Difficulty: Beginner </div>
+                      <div class="mb-3" id="MLDA DLW HACKATHON_color_type" title="Type" style="background-color:#557A95;border-radius:10px;text-align:left;text-indent: 1em;">   Type: Machine Learning </div>
+                      <div class="mb-3" id="MLDA DLW HACKATHON_color_team" title="Number of Team Members" style="background-color:#B1A296;border-radius:10px;text-align:left;text-indent: 1em;">   Team: 1-4 </div>
+                    </div>
+                    <button type="button" class="btn" style="background-color:#7395AE"  data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-hackathonname="MLDA DLW HACKATHON" data-bs-link="https://www.ntu.edu.sg/eee/student-life/mlda/deep-learning-week/deep-learning-week-2021/mlda-dlw-hackathon">Learn More</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Google -->
+            <div class="col px-3 hackathon-card" data-value="Google DSC Solution Challenge 2021" style="display: block;">
+              <div class="card h-100">
+                <div class="card-header text-center text-bold" style="background-color: #00ff88!important;">Open for Registration</div>
+                <div class="row g-0 mx-3">
+                  <div class="mx-auto text-center" style="height:200px;">
+                    <img id="DSC Solution Challenge 2021_image" src="Images/dsc2021.png" alt="Hackathon Image" style="height: 100%; width: 100%; object-fit: contain">
+                  </div>
+                  <div class="card-body">
+
+                    <div class="chaeyoung">
+                      <div class="mb-3" style="background-color:#379683;border-radius:10px;text-align:center">
+                        <b>Google</b> </div>
+
+                      <h5 class="card-title">DSC Solution Challenge 2021</h5>
+                      <p class="card-text my-2" id="DSC Solution Challenge 2021_description" style="font-family: Arial, Helvetica, sans-serif;">The Google Developer Student Clubs - 2021 Solution Challenge mission is to solve for one or more of the United Nations
+                        17 Sustainable Development Goals using Google technology.</p>
+                    </div>
+
+                    <p class="card-text my-0"><small class="text-muted">Register by: 30 November 2021</small></p>
+                    <p class="card-text"><small class="text-muted">Submit by: 30 November 2021</small></p>
+                    <div class="row-cols-1">
+                      <div class="mb-3" id="DSC Solution Challenge 2021_color_exp" title="Experience" style="background-color:#7395AE;border-radius:10px;text-align:left;text-indent: 1em;">   Difficulty: Advanced </div>
+                      <div class="mb-3" id="DSC Solution Challenge 2021_color_type" title="Type" style="background-color:#557A95;border-radius:10px;text-align:left;text-indent: 1em;">   Type: Software Development </div>
+                      <div class="mb-3" id="DSC Solution Challenge 2021_color_team" title="Number of Team Members" style="background-color:#B1A296;border-radius:10px;text-align:left;text-indent: 1em;">   Team: 1-5 </div>
+                    </div>
+
+                    <button type="button" class="btn" style="background-color:#7395AE" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-hackathonname="DSC Solution Challenge 2021" data-bs-link="https://developers.google.com/community/dsc-solution-challenge">Learn More</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+             <!-- Citadel -->
+             <div class="col px-3 hackathon-card" data-value="Citadel The Data Open 2021" style="display: block;">
+              <div class="card h-100">
+                <div class="card-header text-center text-bold" style="background-color: #00ff88!important;">Open for Registration</div>
+                <div class="row g-0 mx-3">
+                  <div class="mx-auto text-center" style="height:200px;">
+                    <img id="The Data Open 2021_image" src="Images/dataopen2021.png" alt="Hackathon Image" style="height: 100%; width: 100%; object-fit: contain">
+                  </div>
+                  <div class="card-body">
+
+                    <div class="chaeyoung">
+                      <div class="mb-3" style="background-color:#379683;border-radius:10px;text-align:center">
+                        <b>Citadel</b> </div>
+
+                      <h5 class="card-title">The Data Open 2021</h5>
+                      <p class="card-text my-2" id="The Data Open 2021_description" style="font-family: Arial, Helvetica, sans-serif;">Citadel is proud to present The Data Open,
+                      a datathon competition taking place throughout the year at a series of top universities. At each event, participants work in teams to
+                      or through a large and complex dataset and then present their findings to a panel of judges.</p>
+                    </div>
+
+                    <p class="card-text my-0"><small class="text-muted">Register by: 15 November 2021</small></p>
+                    <p class="card-text"><small class="text-muted">Submit by: 15 November 2021</small></p>
+                    <div class="row-cols-1">
+                      <div class="mb-3" id="The Data Open 2021_color_exp" title="Experience" style="background-color:#7395AE;border-radius:10px;text-align:left;text-indent: 1em;">   Difficulty: Advanced </div>
+                      <div class="mb-3" id="The Data Open 2021_color_type" title="Type" style="background-color:#557A95;border-radius:10px;text-align:left;text-indent: 1em;">   Type: Quant </div>
+                      <div class="mb-3" id="The Data Open 2021_color_team" title="Number of Team Members" style="background-color:#B1A296;border-radius:10px;text-align:left;text-indent: 1em;">   Team: 1 </div>
+                    </div>
+                    <button type="button" class="btn" style="background-color:#7395AE"  data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-hackathonname="The Data Open 2021" data-bs-link="https://www.citadel.com/careers/the-data-open/apply/?apply_to=apac-datathon-spring-2021">Learn More</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Shopee Code League -->
+
+            <div class="col px-3 hackathon-card" data-value="Shopee Shopee Code League 2021">
+              <div class="card h-100">
+                <div class="card-header text-center text-bold" style="background-color: #ff0000!important;">Closed</div>
+                <div class="row g-0 mx-3">
+                  <div class="mx-auto text-center" style="height:200px;">
+                    <img id="Shopee Code League 2021_image" src="Images/shopeecodeleague2021.png" alt="Hackathon Image" style="height: 100%; width: 100%; object-fit: contain">
+                  </div>
+                  <div class="card-body">
+
+                    <div class="chaeyoung">
+                      <div class="mb-3" style="background-color:#379683;border-radius:10px;text-align:center">
+                        <b>Shopee</b> </div>
+
+                      <h5 class="card-title">Shopee Code League 2021</h5>
+                      <p class="card-text my-2" id="Shopee Code League 2021_description">Shopee Code League is a 3-week coding challenge consisting of 3 coding competitions open to all students and professionals across the region.
+                      The competitions, specially designed by the Shopee tech teams, cover data analytics,
+                      data science and algorithmic problems. Participants must analyse the datasets, draw insightful conclusions and solve the problems in a specified amount of time.</p>
+                    </div>
+
+                    <p class="card-text my-0"><small class="text-muted">Register by: 6 October 2021</small></p>
+                    <p class="card-text"><small class="text-muted">Submit by: 6 October 2021</small></p>
+                    <div class="row-cols-1">
+                      <div class="mb-3" id="Shopee Code League 2021_color_exp" title="Experience" style="background-color:#7395AE;border-radius:10px;text-align:left;text-indent: 1em;">   Difficulty: Beginner </div>
+                      <div class="mb-3" id="Shopee Code League 2021_color_type" title="Type" style="background-color:#557A95;border-radius:10px;text-align:left;text-indent: 1em;">   Type: Data Science </div>
+                      <div class="mb-3" id="Shopee Code League 2021_color_team" title="Number of Team Members" style="background-color:#B1A296;border-radius:10px;text-align:left;text-indent: 1em;">   Team: 2-4 </div>
+                    </div>
+
+                    <button type="button" class="btn" style="background-color:#7395AE"  data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-hackathonname="Shopee Code League 2021" data-bs-link="https://careers.shopee.sg/codeleague/">Learn More</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Google Hashcode 2021 -->
+
+            <div class="col px-3 hackathon-card" data-value="Google Google Hashcode 2021">
+              <div class="card h-100">
+                <div class="card-header text-center text-bold" style="background-color: #ff0000!important;">Closed</div>
+                <div class="row g-0 mx-3">
+                  <div class="mx-auto text-center" style="height:200px;">
+                    <img id="Google Hashcode 2021_image" src="Images/hashcode2021.png" alt="Hackathon Image" style="height: 100%; width: 100%; object-fit: contain">
+                  </div>
+                  <div class="card-body">
+
+                    <div class="chaeyoung">
+                      <div class="mb-3" style="background-color:#379683;border-radius:10px;text-align:center">
+                        <b>Google</b> </div>
+
+                      <h5 class="card-title">Google Hashcode 2021</h5>
+                      <p class="card-text my-2" id="Google Hashcode 2021_description">Hash Code is a team programming competition, organized by Google, for students and professionals around the world. You pick your team and programming language and we pick an engineering problem for you to solve. This year’s contest kicks off with an Online Qualifications, where your team can compete virtually from wherever you’d like,
+                        alongside your virtual Hub. Top teams will then be invited to compete from our virtual World Finals.</p>
+                    </div>
+
+                    <p class="card-text my-0"><small class="text-muted">Register by: 30 September 2021</small></p>
+                    <p class="card-text"><small class="text-muted">Submit by: 30 September 2021</small></p>
+                    <div class="row-cols-1">
+                      <div class="mb-3" id="Google Hashcode 2021_color_exp" title="Experience" style="background-color:#7395AE;border-radius:10px;text-align:left;text-indent: 1em;">   Difficulty: Advanced </div>
+                      <div class="mb-3" id="Google Hashcode 2021_color_type" title="Type" style="background-color:#557A95;border-radius:10px;text-align:left;text-indent: 1em;">   Type: Algorithm </div>
+                      <div class="mb-3" id="Google Hashcode 2021_color_team" title="Number of Team Members" style="background-color:#B1A296;border-radius:10px;text-align:left;text-indent: 1em;">   Team: 2-4 </div>
+                    </div>
+
+                    <button type="button" class="btn" style="background-color:#7395AE"  data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-hackathonname="Google Hashcode 2021" data-bs-link="https://codingcompetitions.withgoogle.com/hashcode">Learn More</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Microsoft Azure 2021 -->
+
+            <div class="col px-3 hackathon-card" data-value="Microsoft Microsoft Azure Virtual Hackathon 2021">
+              <div class="card h-100">
+                <div class="card-header text-center text-bold" style="background-color: #ff0000!important;">Closed</div>
+                  <div class="row g-0 mx-3">
+                    <div class="mx-auto text-center" style="height:200px;">
+                      <img id="Microsoft Azure Virtual Hackathon 2021_image" src="Images/azurehack2021.png" alt="Hackathon Image" style="height: 100%; width: 100%; object-fit: contain">
+                    </div>
+                 <div class="card-body">
+
+                  <div class="chaeyoung">
+                    <div class="mb-3" style="background-color:#379683;border-radius:10px;text-align:center">
+                    <b>Microsoft</b> </div>
+
+                    <h5 class="card-title">Microsoft Azure Virtual Hackathon 2021</h5>
+                    <p class="card-text my-2" id="Microsoft Azure Virtual Hackathon 2021_description">With unprecedented amounts of data being collected every second across the globe, there is an almost infinite amount of
+                    data available to tap into to derive useful insights for crucial decision making across industries. MICROSOFT is challenging you to provide innovative solutions in advanced data analytics and AI for a number of booming industries! Join individually or team up in groups of
+                    up to 4 members to submit your solutions now!</p>
+                  </div>
+
+                  <p class="card-text my-0"><small class="text-muted">Register by: 15 September 2021</small></p>
+                  <p class="card-text"><small class="text-muted">Submit by: 15 September 2021</small></p>
+                  <div class="row-cols-1">
+                    <div class="mb-3" id="Microsoft Azure Virtual Hackathon 2021_color_exp" title="Experience" style="background-color:#7395AE;border-radius:10px;text-align:left;text-indent: 1em;">   Difficulty: Advanced </div>
+                    <div class="mb-3" id="Microsoft Azure Virtual Hackathon 2021_color_type" title="Type" style="background-color:#557A95;border-radius:10px;text-align:left;text-indent: 1em;">   Type: Data Analytics </div>
+                    <div class="mb-3" id="Microsoft Azure Virtual Hackathon 2021_color_team" title="Number of Team Members" style="background-color:#B1A296;border-radius:10px;text-align:left;text-indent: 1em;">   Team: 1-4 </div>
+                    </div>
+
+                <button type="button" class="btn" style="background-color:#7395AE"  data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-hackathonname="Microsoft Azure Virtual Hackathon 2021" data-bs-link="https://discover-ai-with-microsoft.agorize.com/en/challenges/msazurevirtualhack-2021?">Learn More</button>
+                    </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ST Logistics -->
+          <div class="col px-3 hackathon-card" data-value="ST Logistics ST Logistics Innovation Challenge 2021
+          ">
+          <div class="card h-100">
+            <div class="card-header text-center text-bold" style="background-color: #868686!important;">Coming Soon!</div>
+              <div class="row g-0 mx-3">
+          <div class="mx-auto text-center" style="height:200px;">
+            <img id="ST Logistics Innovation Challenge 2021_image" src="Images/stl2021.png" alt="Hackathon Image" style="height: 100%; width: 100%; object-fit: contain">
+          </div>
+          <div class="card-body">
+            <div class="chaeyoung">
+              <div class="mb-3" style="background-color:#379683;border-radius:10px;text-align:center">
+                <b>ST Logistics</b> </div>
+              <h5 class="card-title">ST Logistics Innovation Challenge 2022</h5>
+              <p class="card-text my-2" id="ST Logistics Innovation Challenge 2021_description">We are inviting university students to participate in this challenge not only for the chance to
+                collaborate with a major supply chain and logistics company, test-bed
+                and gain funding to develop solutions, but also to play a critical role in building a more technologically-enabled Singapore.*</p>
+            </div>
+
+            <h6 class = "text-center text-danger">Registrations Opening in January 2022</h6>
+            <div class="row-cols-1">
+              <div class="mb-3" id="ST Logistics Innovation Challenge 2021_color_exp" title="Experience" style="background-color:#7395AE;border-radius:10px;text-align:left;text-indent: 1em;">   Difficulty: Intermediate </div>
+              <div class="mb-3" id="ST Logistics Innovation Challenge 2021_color_type" title="Type" style="background-color:#557A95;border-radius:10px;text-align:left;text-indent: 1em;">   Type: Solution Development </div>
+              <div class="mb-3" id="ST Logistics Innovation Challenge 2021_color_team" title="Number of Team Members" style="background-color:#B1A296;border-radius:10px;text-align:left;text-indent: 1em;">   Team: 1-5 </div>
+            </div>
+
+            <button type="button" class="btn" style="background-color:#7395AE"  data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-hackathonname="ST Logistics Innovation Challenge 2021" data-bs-link="https://innovatewithstl.com/">Learn More</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- JP Morgan -->
+
+          <div class="col px-3 hackathon-card" data-value="JP Morgan Code for Good 2022">
+            <div class="card h-100">
+              <div class="card-header text-center text-bold" style="background-color: #868686!important;">Coming Soon!</div>
+              <div class="row g-0 mx-3">
+                <div class="mx-auto text-center" style="height:200px;">
+                  <img id="Code for Good 2021_image" src="Images/jpm2021.png" alt="Hackathon Image" style="height: 100%; width: 100%; object-fit: contain">
+                </div>
+                <div class="card-body">
+
+                  <div class="chaeyoung">
+                    <div class="mb-3" style="background-color:#379683;border-radius:10px;text-align:center">
+                      <b>JP Morgan</b> </div>
+
+                    <h5 class="card-title">Code for Good 2022</h5>
+                    <p class="card-text my-2" id="Code for Good 2021_description">At our Code for Good event, we bring coders and non-profit organizations together to solve real-world technical problems. You will experience firsthand how we use technology to inspire change, foster inclusion and make a difference in our communities. Work alongside our tech experts.
+                      Meet our recruiting teams and experience what it’s like to work as an engineer at J.P. Morgan.</p>
+                  </div>
+
+                  <h6 class = "text-center text-danger">Registrations Opening in January 2022</h6>
+                  <div class="row-cols-1">
+                    <div class="mb-3" id="Code for Good 2021_color_exp" title="Experience" style="background-color:#7395AE;border-radius:10px;text-align:left;text-indent: 1em;">   Difficulty: Intermediate </div>
+                    <div class="mb-3" id="Code for Good 2021_color_type" title="Type" style="background-color:#557A95;border-radius:10px;text-align:left;text-indent: 1em;">   Type: Social Solution </div>
+                    <div class="mb-3" id="Code for Good 2021_color_team" title="Number of Team Members" style="background-color:#B1A296;border-radius:10px;text-align:left;text-indent: 1em;">   Team: 1 </div>
+                  </div>
+
+                  <button type="button" class="btn" style="background-color:#7395AE"  data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-hackathonname="Code for Good 2021" data-bs-link="https://jpmc.fa.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1001/job/210164222/?utm_medium=SandboxSG&amp;src=SandboxSG">Learn More</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Singapore Airlines App Challenge -->
+          <div class="col px-3 hackathon-card" data-value="Singapore Airlines Singapore Airlines AppChallenge 2022">
+            <div class="card h-100">
+              <div class="card-header text-center text-bold" style="background-color: #868686!important;">Coming Soon!</div>
+              <div class="row g-0 mx-3">
+                <div class="mx-auto text-center" style="height:200px;">
+                  <img id="Singapore Airlines AppChallenge 2021_image" src="Images/sia2021.png" alt="Hackathon Image" style="height: 100%; width: 100%; object-fit: contain">
+                </div>
+                <div class="card-body">
+
+                  <div class="chaeyoung">
+                    <div class="mb-3" style="background-color:#379683;border-radius:10px;text-align:center">
+                      <b>Singapore Airlines</b> </div>
+
+                    <h5 class="card-title">Singapore Airlines AppChallenge 2022</h5>
+                    <p class="card-text my-2" id="Singapore Airlines AppChallenge 2021_description">Shortlisted teams will receive dedicated mentoring sessions from aviation experts, business coaches and a chance to pitch their ideas to Singapore Airlines senior management who will be part of the judging panel.
+                      Up to 500,000 KrisFlyer Miles and Singapore Airlines Merchandise to be won.</p>
+                  </div>
+
+                  <h6 class = "text-center text-danger">Registrations Opening in January 2022</h6>
+                  <div class="row-cols-1">
+                    <div class="mb-3" id="Singapore Airlines AppChallenge 2021_color_exp" title="Experience" style="background-color:#7395AE;border-radius:10px;text-align:left;text-indent: 1em;">   Difficulty: Intermediate </div>
+                    <div class="mb-3" id="Singapore Airlines AppChallenge 2021_color_type" title="Type" style="background-color:#557A95;border-radius:10px;text-align:left;text-indent: 1em;">   Type: Solution Development </div>
+                    <div class="mb-3" id="Singapore Airlines AppChallenge 2021_color_team" title="Number of Team Members" style="background-color:#B1A296;border-radius:10px;text-align:left;text-indent: 1em;">   Team: 1-3 </div>
+                  </div>
+
+                  <button type="button" class="btn" style="background-color:#7395AE"  data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-hackathonname="Singapore Airlines AppChallenge 2021" data-bs-link="https://appchallenge.singaporeair.com/en/challenges/students-2021">Learn More</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <!-- Modal -->
+          <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">
+                            HackathonName
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="text-center my-3">
+                            <img id="modal_image" src="" alt="Hackathon Image" style="height: 100%; width: 50%; object-fit: contain">
+                        </div>
+
+                        <div id="modal_description" class="mb-3"></div>
+
+                        <div class="mb-3" id="modal_color_exp" title="Experience" style="
+                          background-color: #7395AE;
+                          border-radius: 10px;
+                          text-align: left;
+                          text-indent: 1em;
+                          ">
+                            Difficulty:
+                        </div>
+                        <div class="mb-3" id="modal_color_type" title="Type" style="
+                          background-color: #557A95;
+                          border-radius: 10px;
+                          text-align: left;
+                          text-indent: 1em;
+                          ">
+                            Type:
+                        </div>
+                        <div class="mb-3" id="modal_color_team" title="Number of Team Members" style="
+                          background-color: #B1A296;
+                          border-radius: 10px;
+                          text-align: left;
+                          text-indent: 1em;
+                          ">
+                            Team:
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Close
+                        </button>
+                        <a href="" target="_blank" class="btn btn-primary" id="modal_link">View
+                            Website</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+    </div>
+
+
+
+
+    <!-- Javascript Function -->
+    <script>
+      // To search for events
+      function searchKeyword() {
+        var allHackathons = Array.from(document.getElementsByClassName("hackathon-card"))
+        var search = document.getElementById("keyword-search-input").value.toLowerCase()
+        allHackathons.map(x => {
+            hackathonName = x.getAttribute("data-value").toLowerCase()
+            if (hackathonName.includes(search)) {
+                x.style.display = "block";
+            }
+            else {
+                x.style.display = "none"
+            }
+        });
+    }
+
+      // Modal
+      var exampleModal = document.getElementById("exampleModal");
+      exampleModal.addEventListener("show.bs.modal", function (event) {
+      // Button that triggered the modal
+      var button = event.relatedTarget;
+      // Extract info from data-bs-* attributes
+      var hackathonName = button.getAttribute("data-bs-hackathonName");
+      var link = button.getAttribute("data-bs-link");
+      var modalTitle = exampleModal.querySelector(".modal-title");
+      var hackathon_telegram_id = 13;
+      modalTitle.textContent = `${hackathonName}`;
+      document.getElementById(`modal_description`).innerText = document.getElementById(`${hackathonName}_description`).innerText;
+      document.getElementById(`modal_image`).src = document.getElementById(`${hackathonName}_image`).src;
+
+      document.getElementById(`modal_link`).href = link;
+      document.getElementById(`modal_link`).rel = "nofollow";
+
+      document.getElementById(`modal_color_exp`).innerText = document.getElementById(`${hackathonName}_color_exp`).innerText;
+      document.getElementById(`modal_color_type`).innerText = document.getElementById(`${hackathonName}_color_type`).innerText;
+      document.getElementById(`modal_color_team`).innerText = document.getElementById(`${hackathonName}_color_team`).innerText;
+    });
+
+    </script>
+
+
+    <!-- Bootstrap  -->
+    <script src="assets/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Vue -->
+    <!--<script src="assets/js/vue.global.js"></script>-->
+
+    <!-- Axios -->
+    <!-- <script src="assets/js/axios.min.js"></script> -->
+
+    <!-- Home Page Custom -->
+    <!-- <script src="assets/js/home_page.js"></script> -->
+
+  </body>
+</html>

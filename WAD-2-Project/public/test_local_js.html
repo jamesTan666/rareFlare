@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="assets/css/bootstrap.min.css"></link>
+	<head>
+	<body>
+		<br />
+		<button class="btn btn-primary">Test that Bootstrap works</button>
+		<br />
+		<br />
+		<div id="mountPoint">
+			<button class="btn btn-primary" v-on:click="change">Test that Vue works</button>
+			&nbsp;&nbsp;&nbsp;
+			<span id="test">{{firstVar}}</span>
+			<br>
+			<br>
+			<br>
+			<div id="vue-for-test">
+				Test for Vue Computed properties for-loop:
+				<br>
+				if '1 2 3 4 5' appears below, the for-loop works
+				<br>
+				<span style="color: red;">{{ test }}</span>
+			</div>
+		</div>
+		<br />
+		<br />
+		If "root" appears after this line, Axios works. 
+		<div id="axiosTest">
+
+		</div>
+		<hr />
+		<br />
+		
+
+		<script src="assets/js/bootstrap.bundle.min.js"></script>
+		<script src="assets/js/vue.global.js"></script>
+		<script src="assets/js/axios.min.js"></script>
+		<script>
+			const app = {
+				data() {
+					return {
+						firstVar: 2, 
+						testArr: {
+							one: 1, 
+							two: 2,
+							three: 3, 
+							four: 4, 
+							five: 5
+						}
+					};
+				}, 
+				methods: {
+					change() {
+						this.firstVar = 3;
+					}
+				}, 
+				computed: {
+					test() {
+						let result = "";
+						for (let elem in this.testArr) { // testArr = [1, 2, 3, 4, 5];
+							result += this.testArr[elem] + " ";
+						}
+
+						return result;
+					}
+				}
+			}
+
+			Vue.createApp(app).mount("#mountPoint");
+		</script>
+		<script>
+			axios.get("http://127.0.0.1:80/WAD2_Project/public/api/testAPI.php", {
+				params: {
+					password: "abc"
+				}
+			})
+			.then((response) => {
+				document.getElementById("axiosTest").innerText = response.data["message"]; 
+			});
+		</script>
+	</body>
+</html>
